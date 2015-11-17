@@ -3,7 +3,11 @@ require "../premake/modules/modules"
 
 workspace "pahomqtt"
     configurations { "Debug", "Release" }
-    platforms { "android" }
+    if _ACTION == "androidmk" then
+        location "android/jni"
+        ndkabi "all"
+        ndkplatform "android-9"
+    end
 
 project "pahomqtt"
     language "C"
@@ -29,12 +33,7 @@ project "pahomqtt"
         "src/Tree.c",
         "src/utf-8.c"
     }
-
-    if _ACTION == "androidmk" then
-        location "android/jni"
-        ndkabi "all"
-        ndkplatform "android-9"
-    end
+    editandcontinue "Off"
 
     filter "configurations:Debug"
         defines { "DEBUG", "_DEBUG" }
@@ -44,11 +43,10 @@ project "pahomqtt"
         defines { "NDEBUG" }
         optimize "On"
 
-    filter { "configurations:vs*", "language:C or C++" }
+    filter { "action:vs*", "language:C or C++" }
         defines { "WIN32" }
 
     filter { "platforms:android" }
-        defines { "WIN32" }
 
     filter {}
 

@@ -17,6 +17,7 @@ function androidmk.generate_applicationmk(sln)
 
   androidmk.slnBuildScript(sln)
 
+  p.w('APP_MODULE := '..sln.name)
   p.w('PM5_HELP := true')
 
   for cfg in solution.eachconfig(sln) do

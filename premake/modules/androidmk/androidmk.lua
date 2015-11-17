@@ -11,13 +11,14 @@ include "_preload.lua"
 
 
 function androidmk.slnApplicationFile(sln)
-  return sln.name .."_Application.mk"
+  return "Application.mk"
+  --return sln.name .."_Application.mk"
 end
 
 function androidmk.slnAndroidFile(sln)
-  return sln.name .."_Android.mk"
+  return "Android.mk"
+  --return sln.name .."_Android.mk"
 end
-
 
 function androidmk.prjFile(prj)
   return prj.name ..".mk"
