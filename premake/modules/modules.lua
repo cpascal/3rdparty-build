@@ -8,3 +8,8 @@ premake.override(premake.vstudio.vc2010, 'programDataBaseFileName', function(bas
     end
 end)
 
+filter { "action:android" }
+	system "android"
+
+filter {}
+

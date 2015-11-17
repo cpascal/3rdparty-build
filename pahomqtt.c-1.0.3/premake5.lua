@@ -3,8 +3,9 @@ require "../premake/modules/modules"
 
 workspace "pahomqtt"
     configurations { "Debug", "Release" }
+    location "build_%{_ACTION}"
     if _ACTION == "androidmk" then
-        location "android/jni"
+        location "build_%{_ACTION}/jni"
         ndkabi "all"
         ndkplatform "android-9"
     end
@@ -12,7 +13,7 @@ workspace "pahomqtt"
 project "pahomqtt"
     language "C"
     kind "StaticLib"
-    targetdir "build/%{cfg.buildcfg}"
+    targetdir "build_%{_ACTION}/%{cfg.buildcfg}"
     files {
         "src/Clients.c",
         "src/Heap.c",
@@ -46,7 +47,9 @@ project "pahomqtt"
     filter { "action:vs*", "language:C or C++" }
         defines { "WIN32" }
 
-    filter { "platforms:android" }
+    filter { "system:android" }
+        print( _system );
 
     filter {}
 
+ 

@@ -7,6 +7,20 @@
 premake.extensions.androidmk = premake.extensions.androidmk or {}
 local androidmk = premake.extensions.androidmk
 
+local function addOptionAllowed(fieldName, value)
+	local field = premake.option.get("os");
+	if not field then
+		error("No such option: " .. fieldName, 2)
+	end
+
+	field.allowed = field.allowed or {}
+	table.insert(field.allowed, value)
+end
+
+premake.ANDROID = "android"
+premake.api.addAllowed("system", premake.ANDROID)
+addOptionAllowed("os", { "android", "Android" })
+
 include "_preload.lua"
 
 
