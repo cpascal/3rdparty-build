@@ -1,5 +1,5 @@
 -- premake5.lua
-require "../premake/modules/ndk/ndk"
+require "../premake/modules/modules"
 
 workspace "pahomqtt"
     configurations { "Debug", "Release" }
@@ -29,6 +29,12 @@ project "pahomqtt"
         "src/Tree.c",
         "src/utf-8.c"
     }
+
+    if _ACTION == "androidmk" then
+        location "android/jni"
+        ndkabi "all"
+        ndkplatform "android-9"
+    end
 
     filter "configurations:Debug"
         defines { "DEBUG", "_DEBUG" }
