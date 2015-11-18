@@ -20,6 +20,7 @@ project "pahomqtt"
         "src/LinkedList.c",
         "src/Log.c",
         "src/Messages.c",
+        "src/MQTTAsync.c",
         "src/MQTTPacket.c",
         "src/MQTTPacketOut.c",
         "src/MQTTPersistence.c",
