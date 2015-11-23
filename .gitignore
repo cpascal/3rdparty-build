@@ -1,5 +1,6 @@
 *~
-*.swp
+[._]*.swp
+[._]swp
 
 # Visual Studio temporary files
 *.sdf
