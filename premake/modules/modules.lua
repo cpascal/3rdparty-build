@@ -8,8 +8,23 @@ premake.override(premake.vstudio.vc2010, 'programDataBaseFileName', function(bas
     end
 end)
 
-filter { "action:android" }
-	system "android"
+editandcontinue "Off"
+
+filter { "action:vs*", "language:C or C++" }
+    defines { "WIN32" }
+
+filter { "action:android*" }
+    system "android"
+
+filter { "configurations:Debug" }
+    defines { "DEBUG", "_DEBUG" }
+    flags { "Symbols" }
+
+filter { "configurations:Release" }
+    defines { "NDEBUG" }
+    optimize "On"
+
+filter { "system:android" }
 
 filter {}
 

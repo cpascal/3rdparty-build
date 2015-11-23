@@ -6,6 +6,7 @@ end
 
 -- Load the OpenSSL extension
 include "../premake/modules/openssl/openssl.lua"
+include "../premake/modules/modules.lua"
 
 local openssl = premake.extensions.openssl
 

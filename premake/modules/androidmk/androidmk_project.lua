@@ -21,6 +21,21 @@ function androidmk.generate_projectmk(prj)
   androidmk.prjSrcFiles(rootFiles)
 
   for cfg in project.eachconfig(prj) do
+    if cfg.shortname == "release" or cfg.shortname == "Release" then
+      p.w('')
+      androidmk.prjIncludes(prj, cfg)
+      androidmk.prjCppFeatures(prj, cfg)
+      androidmk.prjCfgSrcFiles(cfgFiles[cfg])
+      androidmk.prjDependencies(prj, cfg)
+      androidmk.prjLdFlags(prj, cfg)
+      androidmk.prjCFlags(prj, cfg)
+
+      -- Always last
+      androidmk.prjKind(prj, cfg)
+    end
+  end
+
+  for cfg in project.eachconfig(prj) do
     p.w('')
     p.x('ifeq ($(%s),%s)', androidmk.CONFIG_OPTION, cfg.shortname)
 

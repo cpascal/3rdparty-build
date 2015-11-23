@@ -35,22 +35,6 @@ project "pahomqtt"
         "src/Tree.c",
         "src/utf-8.c"
     }
-    editandcontinue "Off"
-
-    filter "configurations:Debug"
-        defines { "DEBUG", "_DEBUG" }
-        flags { "Symbols" }
-
-    filter "configurations:Release"
-        defines { "NDEBUG" }
-        optimize "On"
-
-    filter { "action:vs*", "language:C or C++" }
-        defines { "WIN32" }
-
-    filter { "system:android" }
-        print( _system );
 
     filter {}
 
- 

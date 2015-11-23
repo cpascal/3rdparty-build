@@ -18,8 +18,20 @@ function androidmk.generate_applicationmk(sln)
   androidmk.slnBuildScript(sln)
 
   p.w('APP_MODULE := '..sln.name)
-  p.w('PM5_HELP := true')
 
+  -- 1st pass (default config)
+  for cfg in solution.eachconfig(sln) do
+    if cfg.shortname == "release" or cfg.shortname == "Release" then
+      p.w('')
+      androidmk.slnOptim(sln, cfg)
+      androidmk.slnAbi(sln, cfg)
+      androidmk.slnPlatform(sln, cfg)
+      androidmk.slnStl(sln, cfg)
+      androidmk.slnToolchainVersion(sln, cfg)
+    end
+  end
+
+  -- 2nd pass
   for cfg in solution.eachconfig(sln) do
     p.w('')
     p.x('ifeq ($(%s),%s)', androidmk.CONFIG_OPTION, cfg.shortname)
@@ -30,11 +42,8 @@ function androidmk.generate_applicationmk(sln)
     androidmk.slnStl(sln, cfg)
     androidmk.slnToolchainVersion(sln, cfg)
 
-    p.w('  PM5_HELP := false')
     p.w('endif')
   end
-
-  androidmk.slnPremakeHelp(sln)
 end
 
 function androidmk.generate_androidmk(sln)
@@ -89,27 +98,6 @@ end
 
 function androidmk.slnBuildScript(sln)
   p.x('APP_BUILD_SCRIPT := $(call my-dir)/%s', androidmk.slnAndroidFile(sln))
-end
-
-function androidmk.slnPremakeHelp(sln)
-  p.w('')
-  p.w('ifeq ($(PM5_HELP),true)')
-
-  p.w('  $(info )')
-  p.w('  $(info Usage:)')
-  p.w('  $(info $()  ndk-build %s=<config>)', androidmk.CONFIG_OPTION)
-  p.w('  $(info )')
-  p.w('  $(info CONFIGURATIONS:)')
-  for cfg in solution.eachconfig(sln) do
-    p.w('  $(info $()  %s)', cfg.shortname)
-  end
-
-  p.w('  $(info )')
-  p.w('  $(info For more ndk-build options, see https://developer.android.com/ndk/guides/ndk-build.html)')
-  p.w('  $(info )')
-
-  p.w('  $(error Set %s and try again)', androidmk.CONFIG_OPTION)
-  p.w('endif')
 end
 
 
@@ -174,3 +162,4 @@ function androidmk.slnToolchainVersion(sln, cfg)
     p.w('  NDK_TOOLCHAIN_VERSION := %s', toolchain)
   end
 end
+
