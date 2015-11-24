@@ -1,5 +1,12 @@
 -- premake5.lua
 
+local packageList = {
+    ["pahomqtt.c-1.0.3"] = {
+        name = "pahomqtt",
+        url = "http://www.openssl.org/source/openssl-1.0.2d.tar.gz",
+    },
+}
+
 newaction
 {
     trigger = "download",
