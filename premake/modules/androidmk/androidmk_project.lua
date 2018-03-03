@@ -21,21 +21,6 @@ function androidmk.generate_projectmk(prj)
   androidmk.prjSrcFiles(rootFiles)
 
   for cfg in project.eachconfig(prj) do
-    if cfg.shortname == "release" or cfg.shortname == "Release" then
-      p.w('')
-      androidmk.prjIncludes(prj, cfg)
-      androidmk.prjCppFeatures(prj, cfg)
-      androidmk.prjCfgSrcFiles(cfgFiles[cfg])
-      androidmk.prjDependencies(prj, cfg)
-      androidmk.prjLdFlags(prj, cfg)
-      androidmk.prjCFlags(prj, cfg)
-
-      -- Always last
-      androidmk.prjKind(prj, cfg)
-    end
-  end
-
-  for cfg in project.eachconfig(prj) do
     p.w('')
     p.x('ifeq ($(%s),%s)', androidmk.CONFIG_OPTION, cfg.shortname)
 
@@ -68,10 +53,12 @@ function androidmk.prjKind(prj, cfg)
   if cfg.kind == premake.STATICLIB  then
     p.w('  include $(BUILD_STATIC_LIBRARY)')
 
-  else -- cfg.kind == premake.SHAREDLIB
+  elseif cfg.kind == premake.SHAREDLIB then
     p.w('  include $(BUILD_SHARED_LIBRARY)')
-
+  else
+	p.w('  include $(BUILD_EXECUTABLE)')
   end
+  
 end
 
 
@@ -82,7 +69,13 @@ function androidmk.prjIncludes(prj, cfg)
         table.translate(
           table.translate(cfg.includedirs,
             function(d)
-              return "$(LOCAL_PATH)/"..project.getrelative(prj, d)
+			  local p = project.getrelative(prj, path.getabsolute(d))
+			  if path.isabsolute(p) then
+				return p
+		      else
+				return "$(LOCAL_PATH)/"..project.getrelative(prj, path.getabsolute(d))
+			  end
+              -- return "$(LOCAL_PATH)/"..project.getrelative(prj, d)
             end)
         , p.esc)
       , '', '', ' '))

@@ -4,6 +4,8 @@
 -- Author : Bastien Brunnenstein
 --
 
+require "gmake"
+
 premake.extensions.androidmk = premake.extensions.androidmk or {}
 local androidmk = premake.extensions.androidmk
 local make = premake.make
@@ -20,12 +22,14 @@ newaction {
   valid_kinds     = { 
     premake.STATICLIB,
     premake.SHAREDLIB,
+    premake.CONSOLEAPP,
   },
 
   valid_languages = { "C", "C++" },
 
 
   onSolution = function(sln)
+    sln.location = sln.location .. "/jni"
     premake.escaper(make.esc)
     premake.generate(sln, androidmk.slnApplicationFile(sln), androidmk.generate_applicationmk)
     premake.generate(sln, androidmk.slnAndroidFile(sln), androidmk.generate_androidmk)
@@ -37,6 +41,7 @@ newaction {
   end,
 
   onCleanSolution = function(sln)
+    sln.location = sln.location .. "/jni"
     premake.clean.file(sln, androidmk.slnApplicationFile(sln))
     premake.clean.file(sln, androidmk.slnAndroidFile(sln))
   end,
